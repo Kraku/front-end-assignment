@@ -2,7 +2,19 @@
 @set('title', 'Bacon factory')
 
 @section('body')
-  @!component('snowdog/bacon', {
-    img: '/images/bacon.jpg'
-  })
+<div class="container mx-auto">
+  <section class="pt-14 pb-14">
+    <button onclick="location.href='/bacon/{{ quantity + 1 }}'" type="button" class="bg-blue-500 hover:bg-blue-700 text-white py-1 px-2 rounded">
+      Yeah, I want more bacon!
+    </button>
+  </section>
+
+  <section class="grid grid-cols-1 md:grid-cols-6  gap-4">
+      @each(bacon in [...Array(quantity)])
+        <div class="box-border h-128 w-128">
+          <img src="{{ imgSrc }}" alt="Beautiful slices of fried bacon">
+        </div>
+      @endeach
+  </section>
+</div>
 @end

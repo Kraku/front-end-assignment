@@ -18,66 +18,52 @@
 |
 */
 
-import Route from '@ioc:Adonis/Core/Route'
-import { schema, rules } from '@ioc:Adonis/Core/Validator'
+import Route from '@ioc:Adonis/Core/Route';
+import { schema, rules } from '@ioc:Adonis/Core/Validator';
 
 Route.get('/', async ({ view }) => {
-  return view.render('index')
-})
+  return view.render('index');
+});
 
-Route.get('/bacon', async ({ view }) => {
-  return view.render('bacon')
-})
+Route.get('/bacon/:quantity?', 'BaconController.index');
 
 Route.get('/checkout', async ({ view }) => {
   const state = {
     cart: {
       items: [
         { name: 'Apple Watch Sport', price: 580 },
-        { name: 'Modern Buckle', price: 380 },
+        { name: 'Modern Buckle', price: 380 }
       ],
       totals: {
         subTotal: 960,
         tax: 0,
-        grandTotal: 960,
-      },
-    },
-  }
+        grandTotal: 960
+      }
+    }
+  };
 
-  return view.render('index', state)
-})
+  return view.render('index', state);
+});
 
 Route.post('/order', async ({ request, response }) => {
   const orderSchema = schema.create({
     firstName: schema.string(),
     lastName: schema.string(),
-    email: schema.string({}, [
-      rules.email(),
-    ]),
+    email: schema.string({}, [rules.email()]),
     country: schema.string(),
-    postalCode: schema.string({}, [
-      rules.regex(new RegExp('^[0-9]{5}$')),
-    ]),
-    phone: schema.string({}, [
-      rules.mobile(),
-    ]),
-    creditCard: schema.string({}, [
-      rules.regex(new RegExp('^[0-9]{16}$')),
-    ]),
-    CVV: schema.string({}, [
-      rules.regex(new RegExp('^[0-9]{3}$')),
-    ]),
-    expDate: schema.string({}, [
-      rules.regex(new RegExp('^[0-9]{2}\/[0-9]{2}$')),
-    ]),
-  })
+    postalCode: schema.string({}, [rules.regex(new RegExp('^[0-9]{5}$'))]),
+    phone: schema.string({}, [rules.mobile()]),
+    creditCard: schema.string({}, [rules.regex(new RegExp('^[0-9]{16}$'))]),
+    CVV: schema.string({}, [rules.regex(new RegExp('^[0-9]{3}$'))]),
+    expDate: schema.string({}, [rules.regex(new RegExp('^[0-9]{2}/[0-9]{2}$'))])
+  });
 
   try {
-    await request.validate({ schema: orderSchema })
+    await request.validate({ schema: orderSchema });
     response.send({
-      message: 'Order successfully placed.',
-    })
-  } catch(error) {
-    response.badRequest(error.messages)
+      message: 'Order successfully placed.'
+    });
+  } catch (error) {
+    response.badRequest(error.messages);
   }
-})
+});
