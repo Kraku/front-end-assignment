@@ -37,6 +37,8 @@
     "@adonisjs/shield": "^7.0.2",
     "@adonisjs/view": "^6.0.2",
     "@snowdog/front-end-recruitment-test-submodule": "^1.0.0",
+    "alpinejs": "^3.4.2",
+    "inputmask": "^5.0.6",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",
     "source-map-support": "^0.5.19"

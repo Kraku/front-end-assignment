@@ -1,0 +1,25 @@
+<div class="flex flex-col shadow-solid-bottom bg-white rounded h-13 pt-1.5 pl-3 pr-2.5" x-init="
+    $nextTick(() => { 
+      const mask = '{{ mask || '' }}'; // prevents 'undefined' or 'null'
+
+      if (!mask) return;
+
+      Inputmask(mask, {
+        rightAlign: false,
+        clearMaskOnLostFocus: false,
+        placeholder: '{{ placeholder }}',
+      }).mask($refs.{{ name }});
+    });
+  ">
+
+  <label class="font-bold text-xs text-gray-600 tracking-wide" for="{{ name }}">
+    {{ label }}
+  </label>
+
+  <input type="{{ type || 'text' }}"
+    id="{{ name }}" 
+    name="{{ name }}"
+    x-ref="{{ name }}"
+    placeholder="{{ placeholder }}"
+    class="font-semibold text-base tracking-wider text-gray-400 outline-none" />
+</div>

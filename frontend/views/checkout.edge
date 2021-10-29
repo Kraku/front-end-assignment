@@ -2,35 +2,138 @@
 @set('title', 'Checkout')
 
 @section('body')
-  <div class="flex flex-row w-checkout px-2.5 font-sans">
-    <div class="flex-grow">
-      
-    </div>
+  <div class="flex flex-row items-start w-checkout px-2.5 font-sans">
+    <form class="flex-grow pr-3" x-data="{}">
+      @!component('components/olHeader', {
+        text: 'PERSONAL INFORMATION',
+        number: 1
+      })
 
-    <div class="w-card bg-white filter rounded-sm shadow-solid-bottom outline-card p-5">
-
-        <div class="font-bold text-xs">YOUR ORDER</div>
-
-        @each(item in cart.items)
-          <div class="flex flex-row justify-between pt-3">
-            <div class="font-medium text-xs">{{ item.name }}</div>
-            <div class="font-medium text-xs">$ {{ item.price }}</div>
+      <div class="mt-4.5 mb-11 pl-7">
+        <div class="flex space-x-3 flex-row">
+          <div class="flex-1">
+            @!component('components/input', {
+              label: 'First name',
+              placeholder: 'Elon',
+              name: 'firstName',
+            })
           </div>
-        @end
-
-        <hr class="border-t-1 border-dashed border-gray-250 mt-5 mb-4" />
-
-        <div class="flex flex-row justify-between">
-          <div class="font-medium text-xs">Total purchases</div>
-          <div class="font-medium text-xs">$ {{ Number(cart.totals.subTotal).toFixed(2) }}</div>
+          <div class="flex-1">
+            @!component('components/input', {
+              label: 'Last name',
+              placeholder: 'Musk',
+              name: 'LastName'
+            })
+          </div>
         </div>
 
-        <div class="flex flex-row justify-between mt-3">
-          <div class="font-medium text-xs">Estimated tax</div>
-          <div class="font-medium text-xs">$ {{ cart.totals.tax }}</div>
+        <div class="mt-4">
+          @!component('components/input', {
+            label: 'Email',
+            placeholder: 'elon@spacex.com',
+            type: 'email',
+            name: 'email'
+          })
         </div>
 
-        <hr class="border-t-2 border-dashed border-gray-250 mt-4 mb-2" />
+        <div class="flex space-x-3 flex-row mt-4">
+          <div class="flex-1">
+            @!component('components/select', {
+              label: 'Country',
+              defaultSelected: 'US',
+              name: 'country',
+              options: [{
+                label: 'United States',
+                value: 'US'
+              }, {
+                label: 'The Netherlands',
+                value: 'NL'
+              }, {
+                label: 'Sweden',
+                value: 'SE'
+              }]
+            })
+          </div>
+          <div class="flex-1">
+            @!component('components/input', {
+              label: 'Postal Code',
+              placeholder: '10001',
+              mask: '99999',
+              name: 'postal'
+            })
+          </div>
+        </div>
+
+        <div class="mt-4">
+          @!component('components/input', {
+            label: 'Phone Number',
+            mask: '(999) 999–99–99',
+            placeholder: '(000) 000-00-00',
+            name: 'phone'
+          })
+        </div>
+      </div>
+
+      @!component('components/olHeader', {
+        text: 'PAYMENTS DETAILS',
+        number: 2,
+        icon: ''
+      })
+
+      <div class="mt-4 mb-11 pl-7">
+        <div>
+          @!component('components/input', {
+            label: 'Credit Card Number',
+            mask: '9999 – 9999 – 9999 – 9999',
+            placeholder: '0000 – 0000 – 0000 – 0000',
+            name: 'cardNumber'
+          })
+        </div>
+
+        <div class="flex space-x-3 flex-row mt-4">
+          <div class="flex-1">
+            @!component('components/input', {
+              label: 'Security code',
+              placeholder: '***',
+              mask: '999',
+              name: 'securityCode'
+            })
+          </div>
+          <div class="flex-1">
+            @!component('components/input', {
+              label: 'Expiration date',
+              placeholder: 'MM / YY',
+              mask: '99 / 99',
+              name: 'expiration'
+            })
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div class="w-card bg-white filter rounded shadow-solid-bottom outline-card p-5 pb-10 mt-10">
+      <div class="font-bold text-xs">YOUR ORDER</div>
+
+      @each(item in cart.items)
+        <div class="flex flex-row justify-between pt-3">
+          <div class="font-medium text-xs">{{ item.name }}</div>
+          <div class="font-medium text-xs">$ {{ item.price }}</div>
+        </div>
+      @end
+
+      <hr class="border-t-1 border-dashed border-gray-250 mt-6 mb-3.5" />
+
+      <div class="flex flex-row justify-between">
+        <div class="font-medium text-xs">Total purchases</div>
+        <div class="font-medium text-xs">$ {{ Number(cart.totals.subTotal).toFixed(2) }}</div>
+      </div>
+
+      <div class="flex flex-row justify-between mt-3">
+        <div class="font-medium text-xs">Estimated tax</div>
+        <div class="font-medium text-xs">$ {{ cart.totals.tax }}</div>
+      </div>
+
+      <hr class="border-t-2 border-dashed border-gray-250 mt-4 mb-2" />
 
       <div class="flex flex-row justify-between">
         <div class="font-bold text-xs">Total</div>
