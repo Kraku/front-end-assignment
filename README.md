@@ -4,7 +4,9 @@ On [/bacon](http://localhost:3333/bacon) you should see a page with beautiful sl
 Create bacon cloning logic and attach it to **Yeah, I want more bacon!** button.
 
 #### Notes
-To keep things simple, I decided to use javascript only to make a redirect (to stay with the "button" instead of making it "a" element). The number of bacon is stored as the optional URL parameter. I could go here with Alpinejs or any other JS framework, but I wanted to play with AdonisJS components before more complex tasks. I tried to keep the state in the backend, but it turned out that it would be too complex for storing a single number value. I found out Alpine has no simple local state management solution; it's more like render and forget.
+To keep things simple, I decided to use javascript only to make a redirect (to stay with the "button" instead of making it "a" element). The number of bacon is stored as the optional URL parameter. I could go here with any light JS framework, but I wanted to play with AdonisJS components before more complex tasks. I tried to keep the state in the backend, but it turned out that it would be too complex for storing a single number value. I found out Alpine has no simple local state management solution; it's more like render and forget.
+
+I also added a single test for a bacon controller/view. It requires running a server on port 3333 (it is testing DOM).
 
 ### Task 2
 Take a look at [design file](./design.png) and recreate it. Use any way of writing styles you are comfortable with and pick `Roboto` as the font family.
@@ -13,6 +15,9 @@ By default Adonis support [PostCSS](https://docs.adonisjs.com/guides/assets-mana
 
 ### Task 3
 Provide simple JS validation for checkout form created earlier.
+
+#### Notes
+I wanted to use this opportunity to discover and learn new things, so I googled for a lightweight JS framework. After a quick research, I chose Alpine.js and the custom data validation code since accepted data formats are relatively straightforward.
 
 ### Task 4
 Send form data to the `POST /order` endpoint and show success / error message based on API response.
