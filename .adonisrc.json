@@ -16,10 +16,10 @@
   ],
   "exceptionHandlerNamespace": "App/Exceptions/Handler",
   "aliases": {
-    "App": "app",
-    "Config": "config",
-    "Database": "database",
-    "Contracts": "contracts"
+    "App": "backend/app",
+    "Config": "backend/config",
+    "Database": "backend/database",
+    "Contracts": "backend/contracts"
   },
   "preloads": [
     "./backend/start/plugins",
