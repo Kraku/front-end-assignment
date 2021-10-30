@@ -27,23 +27,7 @@ Route.get('/', async ({ view }) => {
 
 Route.get('/bacon/:quantity?', 'BaconController.index');
 
-Route.get('/checkout', async ({ view }) => {
-  const state = {
-    cart: {
-      items: [
-        { name: 'Apple Watch Sport', price: 580 },
-        { name: 'Modern Buckle', price: 380 }
-      ],
-      totals: {
-        subTotal: 960,
-        tax: 0,
-        grandTotal: 960
-      }
-    }
-  };
-
-  return view.render('checkout', state);
-});
+Route.get('/checkout', 'CheckoutController.index');
 
 Route.post('/order', async ({ request, response }) => {
   const orderSchema = schema.create({

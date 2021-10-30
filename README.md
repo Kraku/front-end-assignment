@@ -4,6 +4,8 @@
 
 With the server already running, we can start tests with `npm run test`.
 
+My goal was not to make full coverage. A few tests that I added to this project are more like proof that I am familiar with writing them. Unfortunately, the time that I had available for making this task was limited.
+
 ### Task 1
 On [/bacon](http://localhost:3333/bacon) you should see a page with beautiful slices of fried bacon, that comes from external source.
 
