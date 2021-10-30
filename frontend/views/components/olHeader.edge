@@ -1,4 +1,12 @@
 <div class="flex flex-row items-center">
-  <div class="bg-black text-white font-bold rounded-full w-5 h-5 flex items-center justify-center mt-0.5 mb-0.5">{{ number }}</div>
-  <div class="font-extrabold text-xs tracking-wide pl-2">{{ text }}</div>
+  <div class="flex items-center justify-center bg-black text-white font-bold rounded-full w-5 h-5 mt-0.5 mb-0.5">{{ number }}</div>
+  <div class="flex items-center font-extrabold text-xs tracking-wide pl-2">
+    {{ text }}
+    @if(icon)
+      @!component('components/icon', {
+        id: icon,
+        classList: 'h-3 ml-2'
+      })
+    @end
+  </div>
 </div>

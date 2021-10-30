@@ -1,0 +1,12 @@
+<div class="{{ classList }}" 
+  x-data="{ tooltip: false }" 
+  x-on:mouseover="tooltip = true" 
+  x-on:mouseleave="tooltip = false">
+  @!component('components/icon', {
+    id: 'help-outline-grey',
+    classList: 'h-6'
+  })
+  <div x-show="tooltip" class="text-sm text-white absolute bg-blue-400 rounded p-2 transform -translate-y-8 translate-x-8 z-10 w-48">
+    {{ text }}
+  </div>
+</div>

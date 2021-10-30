@@ -21,7 +21,7 @@
       submit: () => {
         
       }
-    }" 
+    }"
     @submit.prevent="submit">
       @!component('components/olHeader', {
         text: 'PERSONAL INFORMATION',
@@ -50,7 +50,6 @@
           @!component('components/input', {
             label: 'Email',
             placeholder: 'elon@spacex.com',
-            type: 'email',
             name: 'email'
           })
         </div>
@@ -96,7 +95,7 @@
       @!component('components/olHeader', {
         text: 'PAYMENTS DETAILS',
         number: 2,
-        icon: ''
+        icon: 'lock-black'
       })
 
       <div class="mt-4 mb-11 pl-7">
@@ -106,7 +105,8 @@
             mask: '9999 – 9999 – 9999 – 9999',
             placeholder: '0000 – 0000 – 0000 – 0000',
             name: 'cardNumber',
-            icon: ''
+            rightIcon: 'visa',
+            rightIconClassList: 'h-6 absolute top-4 right-4'
           })
         </div>
 
@@ -116,7 +116,8 @@
               label: 'Security code',
               placeholder: '***',
               mask: '999',
-              name: 'cardSecurityCode'
+              name: 'cardSecurityCode',
+              hint: 'Lorem ipsum dolor sit amet',
             })
           </div>
           <div class="flex-1">
@@ -128,17 +129,19 @@
             })
           </div>
         </div>
-      </div>
 
-      @!component('components/button', {
-        label: 'COMPLETE PURCHASE',
-        type: 'submit',
-        form: 'checkout',
-        icon: ''
-      })
+        <div class="mt-11">
+          @!component('components/button', {
+            label: 'COMPLETE PURCHASE',
+            type: 'submit',
+            form: 'checkout',
+            icon: 'shopping-cart-white'
+          })
+        </div>
+      </div>
     </form>
 
-    <div class="w-card bg-white filter rounded shadow-solid-bottom outline-card p-5 pb-10 mt-10">
+    <div class="w-card bg-white filter rounded shadow-solid-gray-bottom outline-card p-5 pb-10 mt-10">
       <div class="font-bold text-xs">YOUR ORDER</div>
 
       @each(item in cart.items)

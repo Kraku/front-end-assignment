@@ -1,3 +1,11 @@
-<button type="{{ type }}" form="{{ form }}">
+<button type="{{ type }}" 
+  form="{{ form }}" 
+  class="flex items-center justify-center bg-green shadow-solid-green-bottom rounded w-full h-13 text-sm text-white font-bold">
+  @if(icon)
+    @!component('components/icon', {
+      id: icon,
+      classList: 'h-4 mr-2'
+    })
+  @end
   {{ label }}
 </button>
