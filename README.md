@@ -1,10 +1,14 @@
-### Testing
+## Development
+`npm run dev` -> [localhost:3333](http://localhost:3333)
 
+## Testing
 `npm run ci` command will start the dev server and run tests when `http://localhost:3333` responds with HTTP status code 200.
 
 With the server already running, we can start tests with `npm run test`.
 
 My goal was not to make full coverage. A few tests that I added to this project are more like proof that I am familiar with writing them. Unfortunately, the time that I had available for making this task was limited.
+
+## Tasks
 
 ### Task 1
 On [/bacon](http://localhost:3333/bacon) you should see a page with beautiful slices of fried bacon, that comes from external source.
