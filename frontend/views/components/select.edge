@@ -3,11 +3,12 @@
     {{ label }}
   </label>
 
-  <select class="appearance-none font-semibold text-base tracking-wider text-gray-400 outline-none" id="{{ name }}" name="{{ name }}">
+  <select id="{{ name }}"
+    name="{{ name }}" 
+    x-model="data.{{ name }}" 
+    class="appearance-none font-semibold text-base tracking-wider text-gray-400 outline-none">
     @each(option in options)
-      <div class="flex flex-row justify-between pt-3">
-        <option value="{{ option.value }}">{{ option.label }}</option>
-      </div>
+      <option value="{{ option.value }}">{{ option.label }}</option>
     @end
   </select>
 </div>

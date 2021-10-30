@@ -3,7 +3,26 @@
 
 @section('body')
   <div class="flex flex-row items-start w-checkout px-2.5 font-sans">
-    <form class="flex-grow pr-3" x-data="{}">
+    <form class="flex-grow pr-3" 
+    id="checkout"
+    x-data="{
+      data: {
+        firstName: '',
+        lastName: '',
+        email: '',
+        country: '',
+        postal: '',
+        phone: '',
+        cardNumber: '',
+        cardSecurityCode: '',
+        cardExpiration: ''
+      },
+
+      submit: () => {
+        
+      }
+    }" 
+    @submit.prevent="submit">
       @!component('components/olHeader', {
         text: 'PERSONAL INFORMATION',
         number: 1
@@ -15,14 +34,14 @@
             @!component('components/input', {
               label: 'First name',
               placeholder: 'Elon',
-              name: 'firstName',
+              name: 'firstName'
             })
           </div>
           <div class="flex-1">
             @!component('components/input', {
               label: 'Last name',
               placeholder: 'Musk',
-              name: 'LastName'
+              name: 'lastName'
             })
           </div>
         </div>
@@ -86,7 +105,8 @@
             label: 'Credit Card Number',
             mask: '9999 – 9999 – 9999 – 9999',
             placeholder: '0000 – 0000 – 0000 – 0000',
-            name: 'cardNumber'
+            name: 'cardNumber',
+            icon: ''
           })
         </div>
 
@@ -96,7 +116,7 @@
               label: 'Security code',
               placeholder: '***',
               mask: '999',
-              name: 'securityCode'
+              name: 'cardSecurityCode'
             })
           </div>
           <div class="flex-1">
@@ -104,11 +124,18 @@
               label: 'Expiration date',
               placeholder: 'MM / YY',
               mask: '99 / 99',
-              name: 'expiration'
+              name: 'cardExpiration'
             })
           </div>
         </div>
       </div>
+
+      @!component('components/button', {
+        label: 'COMPLETE PURCHASE',
+        type: 'submit',
+        form: 'checkout',
+        icon: ''
+      })
     </form>
 
     <div class="w-card bg-white filter rounded shadow-solid-bottom outline-card p-5 pb-10 mt-10">
