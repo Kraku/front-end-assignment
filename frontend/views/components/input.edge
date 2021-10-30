@@ -22,7 +22,8 @@
     x-ref="{{ name }}"
     x-model="data.{{ name }}"
     placeholder="{{ placeholder }}"
-    class="font-semibold text-base tracking-wider text-gray-400 outline-none" />
+    class="font-semibold text-base tracking-wider outline-none"
+    :class="data.{{ name }}.length > 0 ? 'text-black' : 'text-gray-400'" /> {{-- dirty hack for placeholder/text colors, Inputmask does not support placeholder color change --}}
 
     @if(hint)
       @!component('components/hint', {

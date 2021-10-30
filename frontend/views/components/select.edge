@@ -11,7 +11,9 @@
   <select id="{{ name }}"
     name="{{ name }}" 
     x-model="data.{{ name }}" 
-    class="relative appearance-none font-semibold text-base tracking-wider text-gray-400 outline-none cursor-pointer bg-transparent">
+    class="relative appearance-none font-semibold text-base tracking-wider outline-none cursor-pointer bg-transparent"
+    :class="data.{{ name }}.length > 0 ? 'text-black' : 'text-gray-400'">
+    <option value="" disabled>-- select --</option>
     @each(option in options)
       <option value="{{ option.value }}">{{ option.label }}</option>
     @end
