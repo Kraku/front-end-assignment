@@ -2,27 +2,164 @@
 @set('title', 'Checkout')
 
 @section('body')
-  <div class="flex flex-row items-start w-checkout px-2.5 font-sans">
-    <form class="flex-grow pr-3" 
-    id="checkout"
+  <div class="relative flex flex-row items-start w-checkout px-2.5 font-sans"
+    {{-- 
+      JS as string is not a perfect solution, but an alternative is to use global variables which is even worse.
+    --}}
     x-data="{
+      status: 'init', // possible values: ['init', 'loading', 'success', 'error']
+      statusMessage: '',
       data: {
-        firstName: '',
-        lastName: '',
-        email: '',
-        country: '',
-        postal: '',
-        phone: '',
-        cardNumber: '',
-        cardSecurityCode: '',
-        cardExpiration: ''
+        firstName: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value,
+          rules: ['required', 'string']
+        },
+        lastName: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value,
+          rules: ['required', 'string']
+        },
+        email: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value,
+          rules: ['required', 'email']
+        },
+        country: {
+          value: 'US',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value,
+          rules: ['required', 'string']
+        },
+        postalCode: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value.replace(/[^0-9]/g, ''),
+          rules: ['required', 'numeric', 'minLength:5', 'maxLength:5']
+        },
+        phone: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value.replace(/[^0-9]/g, ''),
+          rules: ['required', 'numeric', 'minLength:9', 'maxLength:9']
+        },
+        creditCard: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value.replace(/[^0-9]/g, ''),
+          rules: ['required', 'numeric', 'minLength:16', 'maxLength:16']
+        },
+        CVV: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          parser: (value) => value.replace(/[^0-9]/g, ''),
+          rules: ['required', 'numeric', 'minLength:3', 'maxLength:3']
+        },
+        expDate: {
+          value: '',
+          error: false,
+          errorMessage: '',
+          defaultErrorMessage: 'Invalid expiration date',
+          parser: (value) => value.replace(/\s/g, ''),
+          rules: ['required', 'regexMatch:^(0[1-9]|1[0-2])\/?([0-9]{2})$']
+        },
       },
 
-      submit: () => {
+      validate(value, rules) {
+        let res = {
+          isValid: Iodine.is(value, rules)
+        };
+
+        if (res.isValid !== true) res.message = Iodine.getErrorMessage(res.isValid);
+
+        return res;
+      },
+
+      blur(event) {
+        const id = event.target.getAttribute('name');
+        const state = this.data[id];
+        const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+
+        state.error = isValid !== true;
+        state.errorMessage = state.error ? message : '';
+      },
+      input(event) {
+        const id = event.target.getAttribute('name');
+        const state = this.data[id];
+
+        state.error = false;
+        state.errorMessage = '';
+      },
+
+      async submit() {
+        let errors = 0;
+
+        this.status = 'loading';
+
+        for (const id of Object.keys(this.data)) {
+          const state = this.data[id];
+          const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+
+          state.error = isValid !== true;
+          state.errorMessage = state.error ? message : '';
+
+          if (state.error) errors = errors + 1;
+        }
+
+        if (errors > 0) {
+          this.status = 'init';
+
+          return;
+        }
+
+        let body = {};
+
+        for (const [key, state] of Object.entries(this.data)) body[key] = state.parser(state.value);
         
+        try {
+          const request = await fetch('/order', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(body)
+          });
+
+          const response = await request.json();
+
+          if (!request.ok) {
+            for (const [key, value] of Object.entries(response)) {
+              this.data[key].error = true;
+              this.data[key].errorMessage = value[0];
+            }
+
+            this.status = 'init';
+            this.statusMessage = '';
+
+            return;
+          }
+
+          this.status = 'success';
+          this.statusMessage = response.message;
+        } catch (e) {
+          this.status = 'error';
+          this.statusMessage = 'An unexpected error occurred. Please try again later.';
+        }
       }
-    }"
-    @submit.prevent="submit">
+    }" 
+  >
+    <form class="flex-grow pr-3" id="checkout"  @submit.prevent="submit">
       @!component('components/olHeader', {
         text: 'PERSONAL INFORMATION',
         number: 1
@@ -77,7 +214,7 @@
               label: 'Postal Code',
               placeholder: '10001',
               mask: '99999',
-              name: 'postal'
+              name: 'postalCode'
             })
           </div>
         </div>
@@ -85,8 +222,8 @@
         <div class="mt-4">
           @!component('components/input', {
             label: 'Phone Number',
-            mask: '(999) 999–99–99',
-            placeholder: '(000) 000-00-00',
+            mask: '(99) 999–99–99',
+            placeholder: '(00) 000-00-00',
             name: 'phone'
           })
         </div>
@@ -104,7 +241,7 @@
             label: 'Credit Card Number',
             mask: '9999 – 9999 – 9999 – 9999',
             placeholder: '0000 – 0000 – 0000 – 0000',
-            name: 'cardNumber',
+            name: 'creditCard',
             rightIcon: 'visa',
             rightIconClassList: 'h-6 absolute top-4 right-4'
           })
@@ -116,7 +253,7 @@
               label: 'Security code',
               placeholder: '***',
               mask: '999',
-              name: 'cardSecurityCode',
+              name: 'CVV',
               hint: 'Lorem ipsum dolor sit amet',
             })
           </div>
@@ -125,7 +262,7 @@
               label: 'Expiration date',
               placeholder: 'MM / YY',
               mask: '99 / 99',
-              name: 'cardExpiration'
+              name: 'expDate'
             })
           </div>
         </div>
@@ -170,5 +307,7 @@
         <div class="font-bold text-xl">${{ cart.totals.grandTotal }}</div>
       </div>
     </div>
+
+    @!component('components/statusOverlay')
   </div>
 @end
