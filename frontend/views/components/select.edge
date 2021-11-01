@@ -1,5 +1,5 @@
 <div class="relative flex flex-col shadow-solid-bottom bg-white rounded h-13 pt-1.5 pl-3 pr-2.5">
-  <label class="font-bold text-xs text-gray-600 tracking-wide" for="{{ name }}">
+  <label class="text-xs font-bold tracking-wide text-gray-600" for="{{ name }}">
     {{ label }}
   </label>
 
@@ -11,7 +11,7 @@
   <select id="{{ name }}"
     name="{{ name }}" 
     x-model="data.{{ name }}.value" 
-    class="relative appearance-none font-semibold text-base tracking-wider outline-none cursor-pointer bg-transparent"
+    class="relative text-base font-semibold tracking-wider bg-transparent outline-none appearance-none cursor-pointer"
     :class="data.{{ name }}.value.length > 0 ? 'text-black' : 'text-gray-400'">
     @each(option in options)
       <option value="{{ option.value }}">{{ option.label }}</option>
