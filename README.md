@@ -1,5 +1,9 @@
 ## Development
-`npm run dev` -> [localhost:3333](http://localhost:3333)
+```bash
+npm install
+npm run dev
+```
+[http://localhost:3333](http://localhost:3333)
 
 ## Testing
 `npm run ci` command will start the dev server and run tests when `http://localhost:3333` responds with HTTP status code 200.
