@@ -72,7 +72,7 @@
           errorMessage: '',
           defaultErrorMessage: 'Invalid expiration date',
           parser: (value) => value.replace(/\s/g, ''),
-          rules: ['required', 'regexMatch:^(0[1-9]|1[0-2])\/?([0-9]{2})$']
+          rules: ['required', 'regexMatch:^(0[1-9]|1[0-2])\/?([0-9]{2})$', `monthYearAfterOrEqual:${new Date().getTime()}`]
         },
       },
 
@@ -86,10 +86,14 @@
         return res;
       },
 
+      checkRules(state) {
+        return this.validate(state.parser(state.value), state.rules);
+      },
+
       blur(event) {
         const id = event.target.getAttribute('name');
         const state = this.data[id];
-        const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+        const { isValid, message } = this.checkRules(state);
 
         state.error = isValid !== true;
         state.errorMessage = state.error ? message : '';
@@ -109,7 +113,7 @@
 
         for (const id of Object.keys(this.data)) {
           const state = this.data[id];
-          const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+          const { isValid, message } = this.checkRules(state);
 
           state.error = isValid !== true;
           state.errorMessage = state.error ? message : '';
