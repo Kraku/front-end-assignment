@@ -2,7 +2,7 @@
 @set('title', 'Checkout')
 
 @section('body')
-  <div class="relative flex flex-col-reverse items-start md:w-checkout px-2.5 font-sans md:flex-row w-full"
+  <div class="relative flex flex-col-reverse items-start md:max-w-checkout px-2.5 font-sans md:flex-row w-full"
     {{-- 
       JS as string is not a perfect solution, but an alternative is to use global variables which is even worse.
     --}}
@@ -278,7 +278,7 @@
       </div>
     </form>
 
-    <div class="w-full p-5 pb-10 mt-2.5 mb-10 bg-white rounded md:mt-10 filter shadow-solid-gray-bottom outline-card md:w-card">
+    <div class="w-full p-5 pb-8 mt-2.5 mb-10 bg-white rounded md:mt-10 filter shadow-solid-gray-bottom outline-card md:max-w-card">
       <div class="text-xs font-bold">YOUR ORDER</div>
 
       @each(item in cart.items)
