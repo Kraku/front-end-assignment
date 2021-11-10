@@ -13,8 +13,7 @@ window.Alpine.start();
 window.Iodine.addRule('afterCurrentMonthYear', (value) => {
   const todayDate = new Date();
   const expirationDate = new Date();
-  const month = value.substr(0, 2);
-  const year = value.substr(2, 2);
+  const [month, year] = value.split('/');
 
   expirationDate.setFullYear(`20${year}`, parseInt(month, 10) - 1, 1);
 
