@@ -10,10 +10,11 @@ window.Alpine = Alpine;
 window.Alpine.start();
 
 // custom Iodine rule for "MM/YY" date format
-window.Iodine.addRule('afterCurrentMonth', (value) => {
+window.Iodine.addRule('afterCurrentMonthYear', (value) => {
   const todayDate = new Date();
   const expirationDate = new Date();
-  const [month, year] = value.split('/');
+  const month = value.substr(0, 2);
+  const year = value.substr(2, 2);
 
   expirationDate.setFullYear(`20${year}`, parseInt(month, 10) - 1, 1);
 
@@ -26,7 +27,7 @@ window.Iodine.addRule('creditCardNumber', luhnCheck);
 // custom Iodine error messages
 window.Iodine.setErrorMessages({
   ...window.Iodine.messages,
-  monthYearAfterOrEqual: 'Please select a valid date',
+  afterCurrentMonthYear: 'Please select a valid date',
   creditCardNumber: 'Invalid credit card number'
 });
 
