@@ -59,7 +59,7 @@
           parser: (value) => value.replace(/[^0-9]/g, ''),
           rules: ['required', 'numeric', 'minLength:16', 'maxLength:16', 'creditCardNumber'],
           onChange: function (e) {
-            const res = window.CheckoutApp.getGreditCardMetadata(this.parser(e.target.value));
+            const res = window.getGreditCardMetadata(this.parser(e.target.value));
 
             if (!res) return;
 
@@ -259,8 +259,9 @@
           <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'Security code',
-              placeholder: '***',
-              mask: '999',
+              repetitivePlaceholder: '*',
+              repetitiveMask: '9',
+              repetitiveMetadataKey: 'data.creditCard.metadata.codeSize',
               name: 'CVV',
               hint: 'Lorem ipsum dolor sit amet',
             })

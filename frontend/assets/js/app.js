@@ -31,20 +31,18 @@ window.Iodine.setErrorMessages({
 });
 
 // By default, alpine is using window scope
-window.CheckoutApp = {
-  getGreditCardMetadata: (creditCardNumber) => {
-    const defaultValue = { type: '', codeSize: 3 };
-    const first4chars = String(creditCardNumber).substring(0, 4);
+window.getGreditCardMetadata = (creditCardNumber) => {
+  const defaultValue = { type: '', codeSize: 3 };
+  const first4chars = String(creditCardNumber).substring(0, 4);
 
-    if (first4chars === '0000') return defaultValue;
+  if (first4chars === '0000') return defaultValue;
 
-    const res = creditCardType(first4chars);
-  
-    if (!Array.isArray(res) || res.length === 0) return defaultValue;
-  
-    return {
-      type: res[0].type,
-      codeSize: res[0].code.size,
-    }
-  }
+  const res = creditCardType(first4chars);
+
+  if (!Array.isArray(res) || res.length === 0) return defaultValue;
+
+  return {
+    type: res[0].type,
+    codeSize: res[0].code.size
+  };
 };

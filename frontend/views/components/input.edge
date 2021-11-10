@@ -1,15 +1,40 @@
 <div class="relative flex flex-col shadow-solid-bottom bg-white rounded h-13 pt-1.5 pl-3 pr-2.5" x-init="
-    $nextTick(() => { 
-      const mask = '{{ mask || '' }}'; // prevents 'undefined' or 'null'
+    initMask = () => {
+      const ref = $refs.{{ name }};
+
+      if (!ref) return;
+
+      if (ref.inputmask) ref.inputmask.remove();
+
+      const repetitivePlaceholder = '{{ repetitivePlaceholder || '' }}';
+      const repetitiveMask = '{{ repetitiveMask || '' }}';
+      const repetitiveMetadataKey = {{ repetitiveMetadataKey || null }};
+
+      let options = {
+        rightAlign: false,
+        clearMaskOnLostFocus: false
+      };
+
+      let mask = '{{ mask || '' }}';
+      let placeholder = '{{ placeholder || '' }}';
+
+      if (placeholder) {
+        options.placeholder = placeholder;
+      } else if (repetitivePlaceholder && repetitiveMetadataKey) {
+        options.placeholder = repetitivePlaceholder.repeat(repetitiveMetadataKey);
+      }
+
+      if (repetitiveMask && repetitiveMetadataKey) {
+        mask = repetitiveMask.repeat(repetitiveMetadataKey);
+      }
 
       if (!mask) return;
 
-      Inputmask(mask, {
-        rightAlign: false,
-        clearMaskOnLostFocus: false,
-        placeholder: '{{ placeholder }}',
-      }).mask($refs.{{ name }});
-    });
+      Inputmask(mask, options).mask(ref);
+    };
+
+    $nextTick(() => this.initMask);
+    if ('{{ repetitiveMetadataKey || '' }}') $watch('{{ repetitiveMetadataKey || '' }}', this.initMask);
   ">
 
   <label class="text-xs font-bold tracking-wide text-gray-600" for="{{ name }}">
@@ -24,7 +49,7 @@
     placeholder="{{ placeholder }}"
     x-on:blur="blur"
     x-on:input="input"
-    @keydown="data.{{ name }}.onChange($event)"
+    x-on:keydown="data.{{ name }}.onChange && data.{{ name }}.onChange($event)"
     class="text-base font-semibold tracking-wider outline-none"
     :class="data.{{ name }}.value.length > 0 ? 'text-black' : 'text-gray-400'" /> {{-- dirty hack for placeholder/text colors, Inputmask does not support placeholder color change --}}
 
