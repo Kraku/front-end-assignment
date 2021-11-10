@@ -1,0 +1,14 @@
+<div class="relative">
+  @!component('components/input', {
+    label: label,
+    mask: '9999 – 9999 – 9999 – 9999',
+    placeholder: '0000 – 0000 – 0000 – 0000',
+    name: name
+  })
+
+  <template x-if="data.creditCard.metadata.type" >
+    <img :src="`svg/${data.creditCard.metadata.type}.svg`" 
+      :alt="data.creditCard.metadata.type" 
+      class="absolute h-6 top-4 right-4" />
+  </template>
+</div>

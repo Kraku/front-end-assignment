@@ -24,6 +24,7 @@
     placeholder="{{ placeholder }}"
     x-on:blur="blur"
     x-on:input="input"
+    @keydown="data.{{ name }}.onChange($event)"
     class="text-base font-semibold tracking-wider outline-none"
     :class="data.{{ name }}.value.length > 0 ? 'text-black' : 'text-gray-400'" /> {{-- dirty hack for placeholder/text colors, Inputmask does not support placeholder color change --}}
 

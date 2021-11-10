@@ -57,7 +57,19 @@
           error: false,
           errorMessage: '',
           parser: (value) => value.replace(/[^0-9]/g, ''),
-          rules: ['required', 'numeric', 'minLength:16', 'maxLength:16']
+          rules: ['required', 'numeric', 'minLength:16', 'maxLength:16', 'creditCardNumber'],
+          onChange: function (e) {
+            const res = window.CheckoutApp.getGreditCardMetadata(this.parser(e.target.value));
+
+            if (!res) return;
+
+            this.metadata.type = res.type;
+            this.metadata.codeSize = res.codeSize;
+          },
+          metadata: {
+            type: '',
+            codeSize: 3
+          }
         },
         CVV: {
           value: '',
@@ -237,13 +249,9 @@
 
       <div class="mt-4 mb-11 pl-7">
         <div>
-          @!component('components/input', {
+          @!component('components/creditCardNumber', {
             label: 'Credit Card Number',
-            mask: '9999 – 9999 – 9999 – 9999',
-            placeholder: '0000 – 0000 – 0000 – 0000',
-            name: 'creditCard',
-            rightIcon: 'visa',
-            rightIconClassList: 'h-6 absolute top-4 right-4'
+            name: 'creditCard'
           })
         </div>
 
