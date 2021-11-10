@@ -8,7 +8,7 @@ window.Alpine = Alpine;
 window.Alpine.start();
 
 // custom rule for "MM/YY" date format
-window.Iodine.addRule('monthYearAfterOrEqual', (value, param) => {
+window.Iodine.addRule('afterCurrentMonth', (value) => {
   const todayDate = new Date();
   const expirationDate = new Date();
   const [month, year] = value.split('/');
