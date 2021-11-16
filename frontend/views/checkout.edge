@@ -2,9 +2,10 @@
 @set('title', 'Checkout')
 
 @section('body')
-  <div class="relative flex flex-row items-start w-checkout px-2.5 font-sans"
+  <div class="relative flex flex-col-reverse items-start md:max-w-checkout px-2.5 font-sans md:flex-row w-full"
     {{-- 
       JS as string is not a perfect solution, but an alternative is to use global variables which is even worse.
+      EDIT: it is using global scope anyways... yup
     --}}
     x-data="{
       status: 'init', // possible values: ['init', 'loading', 'success', 'error']
@@ -15,64 +16,80 @@
           error: false,
           errorMessage: '',
           parser: (value) => value,
-          rules: ['required', 'string']
+          rules: (data) => ['required', 'string']
         },
         lastName: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value,
-          rules: ['required', 'string']
+          rules: (data) => ['required', 'string']
         },
         email: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value,
-          rules: ['required', 'email']
+          rules: (data) => ['required', 'email']
         },
         country: {
           value: 'US',
           error: false,
           errorMessage: '',
           parser: (value) => value,
-          rules: ['required', 'string']
+          rules: (data) => ['required', 'string']
         },
         postalCode: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value.replace(/[^0-9]/g, ''),
-          rules: ['required', 'numeric', 'minLength:5', 'maxLength:5']
+          rules: (data) => ['required', 'numeric', 'minLength:5', 'maxLength:5']
         },
         phone: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value.replace(/[^0-9]/g, ''),
-          rules: ['required', 'numeric', 'minLength:9', 'maxLength:9']
+          rules: (data) =>  ['required', 'numeric', 'minLength:9', 'maxLength:9']
         },
         creditCard: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value.replace(/[^0-9]/g, ''),
-          rules: ['required', 'numeric', 'minLength:16', 'maxLength:16']
+          rules: (data) => ['required', 'numeric', 'minLength:16', 'maxLength:16', 'creditCardNumber'],
+          onChange: function (e) {
+            const res = window.getGreditCardMetadata(this.parser(e.target.value));
+
+            if (!res) return;
+
+            this.metadata.type = res.type;
+            this.metadata.codeSize = res.codeSize;
+          },
+          metadata: {
+            type: '',
+            codeSize: 3
+          }
         },
         CVV: {
           value: '',
           error: false,
           errorMessage: '',
           parser: (value) => value.replace(/[^0-9]/g, ''),
-          rules: ['required', 'numeric', 'minLength:3', 'maxLength:3']
+          rules: (data) => {
+            const codeSize = data.creditCard.metadata.codeSize;
+
+            return ['required', 'numeric', `minLength:${codeSize}`, `maxLength:${codeSize}`]
+          }
         },
         expDate: {
           value: '',
           error: false,
           errorMessage: '',
           defaultErrorMessage: 'Invalid expiration date',
-          parser: (value) => value.replace(/\s/g, ''),
-          rules: ['required', 'regexMatch:^(0[1-9]|1[0-2])\/?([0-9]{2})$']
+          parser: (value) => `${value.substr(0, 2)}/${value.substr(2, 2)}`,
+          rules: (data) => ['required', 'regexMatch:^(0[1-9]|1[0-2])\/?([0-9]{2})$', 'afterCurrentMonthYear']
         },
       },
 
@@ -89,11 +106,12 @@
       blur(event) {
         const id = event.target.getAttribute('name');
         const state = this.data[id];
-        const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+        const { isValid, message } = this.validate(state.parser(event.target.value), state.rules(this.data));
 
         state.error = isValid !== true;
         state.errorMessage = state.error ? message : '';
       },
+
       input(event) {
         const id = event.target.getAttribute('name');
         const state = this.data[id];
@@ -109,7 +127,7 @@
 
         for (const id of Object.keys(this.data)) {
           const state = this.data[id];
-          const { isValid, message } = this.validate(state.parser(state.value), state.rules);
+          const { isValid, message } = this.validate(state.parser(state.value), state.rules(this.data));
 
           state.error = isValid !== true;
           state.errorMessage = state.error ? message : '';
@@ -157,24 +175,23 @@
           this.statusMessage = 'An unexpected error occurred. Please try again later.';
         }
       }
-    }" 
-  >
-    <form class="flex-grow pr-3" id="checkout"  @submit.prevent="submit">
+    }">
+    <form class="flex-grow w-full pr-3 md:w-auto" id="checkout" @submit.prevent="submit">
       @!component('components/olHeader', {
         text: 'PERSONAL INFORMATION',
         number: 1
       })
 
-      <div class="mt-4.5 mb-11 pl-7">
-        <div class="flex flex-row space-x-3">
-          <div class="flex-1">
+      <div class="mb-11 pl-7">
+        <div class="flex flex-col md:space-x-3 md:flex-row">
+          <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'First name',
               placeholder: 'Elon',
               name: 'firstName'
             })
           </div>
-          <div class="flex-1">
+          <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'Last name',
               placeholder: 'Musk',
@@ -191,8 +208,8 @@
           })
         </div>
 
-        <div class="flex flex-row mt-4 space-x-3">
-          <div class="flex-1">
+        <div class="flex flex-col md:space-x-3 md:flex-row">
+          <div class="flex-1 mt-4.5">
             @!component('components/select', {
               label: 'Country',
               defaultSelected: 'US',
@@ -209,7 +226,7 @@
               }]
             })
           </div>
-          <div class="flex-1">
+          <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'Postal Code',
               placeholder: '10001',
@@ -237,27 +254,24 @@
 
       <div class="mt-4 mb-11 pl-7">
         <div>
-          @!component('components/input', {
+          @!component('components/creditCardNumber', {
             label: 'Credit Card Number',
-            mask: '9999 – 9999 – 9999 – 9999',
-            placeholder: '0000 – 0000 – 0000 – 0000',
-            name: 'creditCard',
-            rightIcon: 'visa',
-            rightIconClassList: 'h-6 absolute top-4 right-4'
+            name: 'creditCard'
           })
         </div>
 
-        <div class="flex flex-row mt-4 space-x-3">
-          <div class="flex-1">
+        <div class="flex flex-col md:space-x-3 md:flex-row">
+          <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'Security code',
-              placeholder: '***',
-              mask: '999',
+              repetitivePlaceholder: '*',
+              repetitiveMask: '9',
+              repetitiveMetadataKey: 'data.creditCard.metadata.codeSize',
               name: 'CVV',
-              hint: 'Lorem ipsum dolor sit amet',
+              hint: 'Lorem ipsum dolor sit amet'
             })
           </div>
-          <div class="flex-1">
+          <div class="flex-1 mt-4.5">
             @!component('components/input', {
               label: 'Expiration date',
               placeholder: 'MM / YY',
@@ -278,7 +292,7 @@
       </div>
     </form>
 
-    <div class="p-5 pb-10 mt-10 bg-white rounded w-card filter shadow-solid-gray-bottom outline-card">
+    <div class="w-full p-5 pb-8 mt-2.5 mb-10 bg-white rounded md:mt-10 filter shadow-solid-gray-bottom outline-card md:max-w-card">
       <div class="text-xs font-bold">YOUR ORDER</div>
 
       @each(item in cart.items)

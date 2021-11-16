@@ -2,19 +2,32 @@
 @set('title', 'Bacon factory')
 
 @section('body')
-<div class="container mx-auto">
+<div class="container mx-auto" x-data="{
+  data: {
+    quantity: {{ quantity }}
+  },
+
+  refreshPageUrl() {
+    window.history.pushState(this.data.quantity, window.document.title, `/bacon/${this.data.quantity}`);
+  },
+
+  handleMoreClick(e) {
+    this.data.quantity = this.data.quantity + 1;
+    this.refreshPageUrl();
+  }
+}">
   <section class="pt-14 pb-14">
-    <button onclick="location.href='/bacon/{{ quantity + 1 }}'" type="button" class="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-700">
+    <button x-on:click="handleMoreClick" type="button" class="px-2 py-1 text-white bg-blue-500 rounded hover:bg-blue-700">
       Yeah, I want more bacon!
     </button>
   </section>
 
   <section class="grid grid-cols-1 gap-4 md:grid-cols-6">
-      @each(bacon in [...Array(quantity)])
-        <div class="box-border h-128 w-128">
-          <img src="{{ imgSrc }}" alt="Beautiful slices of fried bacon">
-        </div>
-      @endeach
+    <template x-for="i in data.quantity">
+      <div class="box-border h-128 w-128">
+        <img src="{{ imgSrc }}" alt="Beautiful slices of fried bacon">
+      </div>
+    </template>
   </section>
 </div>
 @end

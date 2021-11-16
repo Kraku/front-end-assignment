@@ -42,6 +42,7 @@
     "@kingshott/iodine": "^7.0.0",
     "@snowdog/front-end-recruitment-test-submodule": "^1.0.0",
     "alpinejs": "^3.4.2",
+    "credit-card-type": "^9.1.0",
     "inputmask": "^5.0.6",
     "proxy-addr": "^2.0.7",
     "reflect-metadata": "^0.1.13",

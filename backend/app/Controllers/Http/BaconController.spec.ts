@@ -4,38 +4,42 @@ import supertest from 'supertest';
 
 const BASE_URL = `http://localhost:3333/bacon`;
 
-test.group('BaconController', () => {
-  test('should display 1 image', async (assert) => {
-    const { text } = await supertest(BASE_URL).get(`/`).expect(200);
-    const { document } = new JSDOM(text).window;
+/*
+ * Component rewrited to alpinejs, these tests should be moved to frontend testing enviroment
+ */
 
-    assert.equal(document.querySelectorAll('img').length, 1);
-  });
+// test.group('BaconController', () => {
+  // test('should display 1 image', async (assert) => {
+  //   const { text } = await supertest(BASE_URL).get(`/`).expect(200);
+  //   const { document } = new JSDOM(text).window;
 
-  test('should display 2 images', async (assert) => {
-    const quantity = 2;
+  //   assert.equal(document.querySelectorAll('img').length, 1);
+  // });
 
-    const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
-    const { document } = new JSDOM(text).window;
+  // test('should display 2 images', async (assert) => {
+  //   const quantity = 2;
 
-    assert.equal(document.querySelectorAll('img').length, quantity);
-  });
+  //   const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
+  //   const { document } = new JSDOM(text).window;
 
-  test('should display 16 images', async (assert) => {
-    const quantity = 16;
+  //   assert.equal(document.querySelectorAll('img').length, quantity);
+  // });
 
-    const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
-    const { document } = new JSDOM(text).window;
+  // test('should display 16 images', async (assert) => {
+  //   const quantity = 16;
 
-    assert.equal(document.querySelectorAll('img').length, quantity);
-  });
+  //   const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
+  //   const { document } = new JSDOM(text).window;
 
-  test('should display 32 images', async (assert) => {
-    const quantity = 32;
+  //   assert.equal(document.querySelectorAll('img').length, quantity);
+  // });
 
-    const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
-    const { document } = new JSDOM(text).window;
+  // test('should display 32 images', async (assert) => {
+  //   const quantity = 32;
 
-    assert.equal(document.querySelectorAll('img').length, quantity);
-  });
-});
+  //   const { text } = await supertest(BASE_URL).get(`/${quantity}`).expect(200);
+  //   const { document } = new JSDOM(text).window;
+
+  //   assert.equal(document.querySelectorAll('img').length, quantity);
+  // });
+// });
